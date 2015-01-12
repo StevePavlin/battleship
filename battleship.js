@@ -68,6 +68,8 @@ var model = {
 		console.log(this.ships);
                 
                 console.log("generating a ship")
+                
+                // Check if everything is free of collisions, if not, the generation will repeat
                 this.generateShip();
 	},
         /*
@@ -82,29 +84,74 @@ var model = {
 		var direction = Math.floor((Math.random() * 2));
                 
                 // Generate 3 random positions on the board depending on the direction 
+   
+                // Generate a row
+                var row = Math.floor((Math.random() * this.boardSize));
+                // Generate a column
+                var column = Math.floor((Math.random() * this.boardSize));
+                
+                
+                /* DEBUG
+                var direction = 1;
+                var row = 5;
+                var column = 6; */
+                
+                // Temporary "Ship" object position
+                var locations = [];
+                
+                
+                console.log("row " + row, "column " + column);
+                
+                // Handle out of bounds and check for collisions
                 
                 switch(direction) {
-                    
                     // Vertical
                     case 0:
-                        // Generate a row
-                        var row = console.log(Math.floor((Math.random() * this.boardSize)));
-                        // Generate a column
-                        var column = console.log(Math.floor((Math.random() * this.boardSize)));
+                        // Generated at a bottom cell
+                        if (row + 1 > this.boardSize - 1) {
+                            // Generate locations
+                            for (i = 0; i < this.shipLength; i++) {
+                                locations.push(row - i, column);
+                            }
                         
-                        console.log(row, column)
+                        // Generated at a top cell
+                        } else if (row - 1 < 0) {
+                            
+                            // Generate locations
+                            for (i = 0; i < this.shipLength; i++) {
+                                locations.push(row + i, column);
+                            }
+                        // Free to put it wherever
+                        } else {
+                            
+                        }
                         break;
-                    
                     // Horizontal
                     case 1:
-                        // Generate a row
-                        var row = console.log(Math.floor((Math.random() * this.boardSize)));
-                        // Generate a column
-                        var column = console.log(Math.floor((Math.random() * this.boardSize)));
+                        // Generated at a rightmost cell
+                        if (column + 1 > this.boardSize - 1) {
+                            // Generate locations
+                            for (i = 0; i < this.shipLength; i++) {
+                                locations.push(row, column - i);
+                            }
                         
-                        console.log(row, column)                        
+                        // Generated at a leftmost cell
+                        } else if (column - 1 < 0) {
+                            
+                            // Generate locations
+                            for (i = 0; i < this.shipLength; i++) {
+                                locations.push(row, column + i);
+                            }
+                            
+                        // Free to put it wherever
+                        } else {
+                            
+                        }
                         break;
                 }
+                
+                console.log(locations);
+                
 		
 	},
 
@@ -114,7 +161,21 @@ var model = {
  * for collisions.
  */
 	collision: function(locations) {
-		
+            for (var ship in this.ships) {
+                console.log(this.ships[ship].locations);
+                var currentShipLoc = this.ships[ship].locations
+                
+                for (var loc in currentShipLoc) {
+                    // Check if there is a conflict
+                    for (var myLoc in locations) {
+                        if (locations[myLoc] === currentShipLoc[loc]) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+            
 	}
 	
 }; 
@@ -218,7 +279,8 @@ function init() {
 	guessInput.onkeypress = handleKeyPress;
 
 	// place the ships on the game board
-	model.generateShipLocations();
+	//model.generateShipLocations();
+        console.log(model.collision(["24"]))
 }
 
 
