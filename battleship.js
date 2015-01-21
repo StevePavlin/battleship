@@ -91,63 +91,33 @@ var model = {
                 var column = Math.floor((Math.random() * this.boardSize));
                 
                 
-                /* DEBUG
+                //DEBUG
                 var direction = 1;
                 var row = 5;
-                var column = 6; */
+                var column = 6;
                 
                 // Temporary "Ship" object position
                 var locations = [];
                 
                 
                 console.log("row " + row, "column " + column);
+                var cell = row.toString() + column.toString();
                 
                 // Handle out of bounds and check for collisions
                 
                 switch(direction) {
                     // Vertical
                     case 0:
-                        // Generated at a bottom cell
-                        if (row + 1 > this.boardSize - 1) {
-                            // Generate locations
-                            for (i = 0; i < this.shipLength; i++) {
-                                locations.push(row - i, column);
-                            }
-                        
-                        // Generated at a top cell
-                        } else if (row - 1 < 0) {
-                            
-                            // Generate locations
-                            for (i = 0; i < this.shipLength; i++) {
-                                locations.push(row + i, column);
-                            }
-                        // Free to put it wherever
-                        } else {
-                            
+                        if (!this.collision(cell)) {
+                            console.log("good to put here")
                         }
+                        
                         break;
                     // Horizontal
                     case 1:
-                        // Generated at a rightmost cell
-                        if (column + 1 > this.boardSize - 1) {
-                            // Generate locations
-                            for (i = 0; i < this.shipLength; i++) {
-                                locations.push(row, column - i);
-                            }
-                        
-                        // Generated at a leftmost cell
-                        } else if (column - 1 < 0) {
-                            
-                            // Generate locations
-                            for (i = 0; i < this.shipLength; i++) {
-                                locations.push(row, column + i);
-                            }
-                            
-                        // Free to put it wherever
-                        } else {
-                            
-                        }
                         break;
+                        
+                        
                 }
                 
                 console.log(locations);
@@ -279,8 +249,8 @@ function init() {
 	guessInput.onkeypress = handleKeyPress;
 
 	// place the ships on the game board
-	//model.generateShipLocations();
-        console.log(model.collision(["24"]))
+	model.generateShipLocations();
+        //console.log(model.collision(["24"]))
 }
 
 
